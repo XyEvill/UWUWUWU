@@ -1,0 +1,71 @@
+board = [[" "] * 3 for i in range(3)] #Генератор поля
+#Функция для вывода поля
+def draw_board():
+    print(f" 0 1 2")
+    for i in range(3):
+        row_info=" ".join(board[i])
+        print(f'{i}{row_info}')
+#Запрос хода
+def ask():
+    while True:
+        cords = input("Введите 2 координаты  (От 0 до 2)").split()
+
+        if len(cords)!=2:
+            print("Введите 2 координаты")
+            continue
+        x, y = cords
+
+        if not (x.isdigit()) or not (y.isdigit()):
+            print(" Введите числа ")
+            continue
+
+        x, y = int(x), int(y)
+
+        if 0 > x > 2 or 0 > y > 2:
+            print("Неверные координаты")
+            continue
+
+        if board[x][y] != " ":
+            print("Ячейка занята")
+            continue
+        return x, y
+#Проверка победы
+def win ():
+    win_comb = (((0, 0), (0, 1), (0, 2)), ((1, 0), (1, 1), (1, 2)), ((2, 0), (2, 1), (2, 2)),
+                ((0, 2), (1, 1), (2, 0)), ((0, 0), (1, 1), (2, 2)), ((0, 0), (1, 0), (2, 0)),
+                ((0, 1), (1, 1), (2, 1)), ((0, 2), (1, 2), (2, 2)))
+    for i in win_comb:
+        symbols = []
+        for l in i:
+            symbols.append(board[l[0]][l[1]])
+        if symbols == ["X", "X", "X"]:
+            print("Выйграли X")
+            return True
+        if symbols == ["0", "0", "0"]:
+            print("Выйграли 0")
+            return True
+    return False
+
+#Ходы игроков
+num=0
+while True:
+    num+=1
+    draw_board()
+    if num % 2 == 1:
+        print("Ходит Х")
+    else:
+        print("Ходит 0")
+
+    x, y = ask()
+
+    if num % 2 == 1:
+        board[x][y] = "X"
+    else:
+        board[x][y] = "0"
+
+    if win():
+        break
+
+    if num == 9:
+        print("Ничья")
+        break
